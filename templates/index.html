@@ -10,13 +10,15 @@
 
   <table>
     <tr>
-      <th>Name</th>
-      <th>{added}</th>
+      {% for column_name in column_names %}
+      <th>{{ column_name }}</th>
+      {% endfor %}
     </tr>
+    {% for task_row in tasks %}
     <tr>
-      {% for task in tasks %}
-      <td>{{ task[1]}}</td>
-      <td>{{ task[2] }}</td>
+      {% for value in task_row[1:] %}
+      <td>{{ value }}</td>
+      {% endfor %}
     </tr>
     {% endfor %}
   </table>

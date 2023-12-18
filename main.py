@@ -26,13 +26,13 @@ with app.app_context():
     cur = mysql.connection.cursor()
 
     # Check if the column already exists
-    check_query = f"SHOW COLUMNS FROM todo LIKE '{today_date}'"
+    check_query = f"SHOW COLUMNS FROM ATTENDANCE LIKE '{today_date}'"
     cur.execute(check_query)
     existing_column = cur.fetchone()
 
     if not existing_column:
         # SQL query to add a new column with today's date
-        alter_query = f"ALTER TABLE todo ADD COLUMN {today_date} varchar(50) DEFAULT 'absent'"
+        alter_query = f"ALTER TABLE ATTENDANCE ADD COLUMN {today_date} varchar(50) DEFAULT 'absent'"
         cur.execute(alter_query)
         print(f"Column {today_date} added successfully.")
     else:
@@ -66,19 +66,19 @@ def markAttendance(name):
     with app.app_context():
         cur = mysql.connection.cursor()
 
-        check = f"SELECT * FROM TODO WHERE CONTENT='{name}'"
+        check = f"SELECT * FROM ATTENDANCE WHERE NAME='{name}'"
         cur.execute(check)
 
         # Fetch the result
         result = cur.fetchone()
         if result is None:
-            student_insert = f"INSERT INTO TODO(CONTENT, {today_date}) VALUES('{name}', '{time}')"
+            student_insert = f"INSERT INTO ATTENDANCE(NAME, {today_date}) VALUES('{name}', '{time}')"
             cur.execute(student_insert)
             mysql.connection.commit()
             print(
                 f"Successfully added record for {name} and marked attendance")
         elif result[-1] == 'absent':
-            mark_present_query = f"UPDATE todo SET {today_date}='{time}' WHERE content='{name}'"
+            mark_present_query = f"UPDATE ATTENDANCE SET {today_date}='{time}' WHERE NAME='{name}'"
             cur.execute(mark_present_query)
             mysql.connection.commit()
             print(f"Added attendance for {name} at {time}")
